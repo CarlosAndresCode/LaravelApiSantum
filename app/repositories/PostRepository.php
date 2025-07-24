@@ -19,24 +19,41 @@ class PostRepository
 
     public function getPostById(int $id): ?Post
     {
-        return Post::with(['user', 'comments'])->findOrFail($id);
+        $post = Post::with(['user', 'comments'])->find($id);
+
+        if (!$post) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Post with ID {$id} not found.");
+        }
+
+        return $post;
     }
 
-    public function create(array $data)
+    public function createPost(array $data)
     {
         return Post::create($data);
     }
 
     public function updatePost(int $id, array $data): Post
     {
-        $post = Post::findOrFail($id);
+        $post = Post::with(['user', 'comments'])->find($id);
+
+        if (!$post) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Post with ID {$id} not found.");
+        }
+
         $post->update($data);
         return $post;
     }
 
     public function deletePost(int $id): void
     {
-        $post = Post::findOrFail($id)->delete();
+        $post = Post::with(['user', 'comments'])->find($id);
+
+        if (!$post) {
+            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Post with ID {$id} not found.");
+        }
+
+        $post->delete();
     }
 
 }
