@@ -41,6 +41,10 @@ class PostController extends Controller
     {
         $post = $this->postRepository->getPostById($post);
 
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
+
         return new PostResource($post);
     }
 
@@ -51,6 +55,9 @@ class PostController extends Controller
     {
         $post = $this->postRepository->updatePost($post, $request->validated());
 
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
         return new PostResource($post);
     }
 

@@ -22,7 +22,7 @@ class PostRepository
         $post = Post::with(['user', 'comments'])->find($id);
 
         if (!$post) {
-            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Post with ID {$id} not found.");
+            return null;
         }
 
         return $post;
@@ -33,12 +33,12 @@ class PostRepository
         return Post::create($data);
     }
 
-    public function updatePost(int $id, array $data): Post
+    public function updatePost(int $id, array $data): ?Post
     {
         $post = Post::with(['user', 'comments'])->find($id);
 
         if (!$post) {
-            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Post with ID {$id} not found.");
+            return null;
         }
 
         $post->update($data);
