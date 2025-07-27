@@ -40,6 +40,9 @@ class CommentController extends Controller
     public function show(int $comment)
     {
         $comment = $this->commentRepository->getCommentById($comment);
+        if (!$comment) {
+            return response()->json(['message' => 'Comment not found'], 404);
+        }
 
         return new CommentResource($comment);
     }
@@ -50,6 +53,10 @@ class CommentController extends Controller
     public function update(CommentUpdateRequest $request, int $comment)
     {
         $comment = $this->commentRepository->updateComment($comment, $request->validated());
+
+        if (!$comment) {
+            return response()->json(['message' => 'Comment not found'], 404);
+        }
 
         return new CommentResource($comment);
     }

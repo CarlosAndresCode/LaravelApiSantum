@@ -20,14 +20,23 @@ class CommentRepository
         return Comment::create($data);
     }
 
-    public function getCommentById(int $id): Comment
+    public function getCommentById(int $id): ?Comment
     {
-        return Comment::with(['user', 'post'])->findOrFail($id);
+        $comment = Comment::with(['user', 'post'])->find($id);
+        if (!$comment) {
+            return null;
+        }
+        return $comment;
     }
 
-    public function updateComment(int $id, array $data): Comment
+    public function updateComment(int $id, array $data): ?Comment
     {
-        $comment = Comment::findOrFail($id);
+        $comment = Comment::find($id);
+
+        if (!$comment) {
+            return null;
+        }
+
         $comment->update($data);
 
         return $comment;
@@ -35,6 +44,10 @@ class CommentRepository
 
     public function deleteComment(int $id): void
     {
-        Comment::findOrFail($id)->delete();
+        $comment = Comment::find($id);
+        if (!$comment) {
+            return;
+        }
+        $comment->delete();
     }
 }

@@ -50,7 +50,7 @@ class PostRepository
         $post = Post::with(['user', 'comments'])->find($id);
 
         if (!$post) {
-            throw new \Illuminate\Database\Eloquent\ModelNotFoundException("Post with ID {$id} not found.");
+            return;
         }
 
         $post->delete();
