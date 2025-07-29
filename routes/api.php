@@ -15,3 +15,8 @@ Route::apiResource('comments', CommentController::class);
 
 Route::post('/users/register', [AuthController::class, 'register']);
 Route::post('/users/login', [AuthController::class, 'login']);
+
+Route::middleware('signed')
+    ->get('/email/verify/{id}/{hash}', [AuthController::class, 'verify'])
+    ->name('verification.verify');
+

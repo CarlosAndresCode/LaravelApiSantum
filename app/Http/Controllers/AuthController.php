@@ -40,6 +40,15 @@ class AuthController extends Controller
         ]);
     }
 
+    public function verify(Request $request): JsonResponse
+    {
+        $user = $this->userRepository->verifyEmail($request);
+        if ($user) {
+            return response()->json($user);
+        }
+        return response()->json(['error' => 'Email verification failed'], 400);
+    }
+
     public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();

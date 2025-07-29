@@ -23,11 +23,16 @@ class UserRepository
             'password' => Hash::make($request->password),
         ]);
 
-        $token = $user->createToken('auth_token')->plainTextToken;
+        if (!$user) {
+            return [
+                'error' => 'User registration failed',
+            ];
+        }
+
+        $user->sendEmailVerificationNotification();
 
         return [
-            'access_toke' => $token,
-            'token_type' => 'Bearer',
+            'message' => 'User registered successfully, please check your email for verification.',
         ];
     }
 
@@ -45,6 +50,25 @@ class UserRepository
 
         return [
             'access_toke' => $token,
+            'token_type' => 'Bearer',
+        ];
+    }
+
+    public function verifyEmail(mixed $request): array
+    {
+        $user = User::find($request->route('id'));
+
+        if (!$user || !hash_equals($request->route('hash'), sha1($user->getEmailForVerification()))) {
+            return [
+                'error' => 'Invalid verification link',
+            ];
+        }
+
+        $user->markEmailAsVerified();
+
+        return [
+            'message' => 'Email verified successfully',
+            'access_toke' => $user->createToken('auth_token')->plainTextToken,
             'token_type' => 'Bearer',
         ];
     }
