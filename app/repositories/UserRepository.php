@@ -3,7 +3,6 @@
 namespace App\repositories;
 
 use App\Models\User;
-use App\Http\Requests\RegisterRequest;
 use Illuminate\Support\Facades\Hash;
 
 class UserRepository

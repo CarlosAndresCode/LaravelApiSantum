@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\RegisterRequest;
 use App\repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -39,13 +37,13 @@ class AuthController extends Controller
                 'access_token' => $result['access_toke'],
                 'token_type' => $result['token_type'],
             ]
-        ], 200);
+        ]);
     }
 
     public function logout(): JsonResponse
     {
         auth()->user()->tokens()->delete();
 
-        return response()->json(['message' => 'Logged out successfully'], 200);
+        return response()->json(['message' => 'Logged out successfully']);
     }
 }
