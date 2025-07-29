@@ -18,6 +18,10 @@ class AuthController extends Controller
     {
         $user = $this->userRepository->register($request);
 
+        if (isset($user['error'])) {
+            return response()->json(['error' => $user['error']], 400);
+        }
+
         return response()->json(['message' => 'User registered successfully', 'data' => $user], 201);
     }
 
